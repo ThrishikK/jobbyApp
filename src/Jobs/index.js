@@ -9,6 +9,7 @@ import './index.css'
 
 const urlProfile = 'https://apis.ccbp.in/profile'
 const urlJobs = 'https://apis.ccbp.in/jobs'
+const employmentStringList = []
 
 const apiStatusConstants = {
   initial: 'INITIAL',
@@ -25,6 +26,8 @@ class Jobs extends Component {
     apiProfileStatus: apiStatusConstants.initial,
     apiJobStatus: apiStatusConstants.initial,
     searchInput: '',
+    employmentString: '',
+    minimumPackage: '',
   }
 
   componentDidMount() {
@@ -111,13 +114,33 @@ class Jobs extends Component {
     }
   }
 
+  employmentChange = event => {
+    // console.log(event)
+    // console.log(event.target)
+    console.log(event.target.id)
+    console.log(event.target.checked)
+    if (event.target.checked) {
+      employmentStringList.push(event.target.id)
+    } else if (employmentStringList.includes(event.target.id)) {
+      employmentStringList.pop(event.target.id)
+    }
+    const employmentString = employmentStringList.join(',')
+    console.log(employmentStringList)
+    console.log(employmentString)
+    this.setState({employmentString}, this.getJobsDetails)
+  }
+
   renderTypesOfEmployment = () => (
     <>
       <h1>Type of Employment</h1>
       <ul className="employment-types">
         {employmentTypesList.map(eachType => (
           <li key={eachType.employmentTypeId}>
-            <input type="checkbox" id={eachType.employmentTypeId} />
+            <input
+              type="checkbox"
+              id={eachType.employmentTypeId}
+              onChange={this.employmentChange}
+            />
             <label htmlFor={eachType.employmentTypeId}>{eachType.label}</label>
           </li>
         ))}
@@ -125,13 +148,31 @@ class Jobs extends Component {
     </>
   )
 
+  salaryChanges = event => {
+    // // console.log(event)
+    // console.log(event.target)
+    const {value} = event.target
+    console.log(value)
+    let filteredValue = value.split(' ')
+    filteredValue = parseInt(filteredValue[0])
+    filteredValue *= 100000
+    console.log(filteredValue)
+    this.setState({minimumPackage: filteredValue}, this.getJobsDetails)
+  }
+
   renderSalaryRanges = () => (
     <>
       <h1>Salary Range</h1>
       <ul className="employment-types">
         {salaryRangesList.map(eachType => (
           <li key={eachType.id}>
-            <input type="checkbox" id={eachType.salaryRangeId} />
+            <input
+              type="radio"
+              name="salary ranges"
+              id={eachType.salaryRangeId}
+              value={eachType.label}
+              onChange={this.salaryChanges}
+            />
             <label htmlFor={eachType.salaryRangeId}>{eachType.label}</label>
           </li>
         ))}
@@ -143,8 +184,8 @@ class Jobs extends Component {
 
   //   RIGHT CONTAINER START
   getJobsDetails = async () => {
-    const {searchInput} = this.state
-    // console.log(searchInput)
+    const {searchInput, employmentString, minimumPackage} = this.state
+    console.log(minimumPackage)
     this.setState({apiJobStatus: apiStatusConstants.loading})
     const jwtToken = Cookies.get('jwt_token')
     // console.log(jwtToken)
@@ -154,8 +195,8 @@ class Jobs extends Component {
       },
       method: 'GET',
     }
-    const urlJobFilter = `${urlJobs}?search=${searchInput}`
-    // console.log(urlJobFilter)
+    const urlJobFilter = `${urlJobs}?search=${searchInput}&employment_type=${employmentString}&minimum_package=${minimumPackage}`
+    console.log(urlJobFilter)
     const responseJobs = await fetch(urlJobFilter, options)
     const dataJobs = await responseJobs.json()
     // console.log(dataJobs)

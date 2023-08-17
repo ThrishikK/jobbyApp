@@ -1,12 +1,21 @@
 .main-job-details-container {
   display: flex;
   flex-direction: column;
+  padding: 9px;
+}
+
+.second-container {
+  background-color: black;
+  padding: 27px;
 }
 
 .selected-job-container {
   display: flex;
   flex-direction: column;
   padding: 27px;
+  background-color: #272727;
+  color: white;
+  border-radius: 15px;
 }
 
 .container-1 {
@@ -18,6 +27,11 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+}
+
+.company-logo {
+  margin-right: 9px;
+  margin-left: 9px;
 }
 
 .title-and-stars-container {
@@ -42,11 +56,13 @@
 .location-container {
   display: flex;
   flex-direction: row;
+  margin: 5px;
 }
 
 .job-type-container {
   display: flex;
   flex-direction: row;
+  margin: 5px;
 }
 
 .hr-rule {
@@ -75,4 +91,32 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.skill-name-li-item {
+  margin-left: 81px;
+  margin-right: 81px;
+  margin-top: 18px;
+  margin-bottom: 18px;
+  display: flex;
+}
+
+.skill-name-p {
+  margin-left: 18px;
+}
+
+.container-4-life-at-company {
+  padding: 18px;
+}
+
+.container-4-1 {
+  display: flex;
+  flex-direction: row;
+}
+
+.un-ol-similar-jobs-container {
+  list-style-type: none;
+  display: flex;
+  background-color: black;
+  flex-direction: row;
 }

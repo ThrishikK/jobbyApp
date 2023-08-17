@@ -1,0 +1,32 @@
+.container-main-j {
+  display: flex;
+  flex-direction: column;
+  background-color: #272727;
+  border-radius: 18px;
+  margin: 8px;
+  color: white;
+  padding: 9px;
+}
+
+.container-1-j {
+  display: flex;
+  flex-direction: row;
+}
+
+.container-1-1-j {
+  display: flex;
+  flex-direction: column;
+}
+
+.container-3-j {
+  display: flex;
+  flex-direction: row;
+}
+
+.similar-job-img {
+  height: 45px;
+  width: 54px;
+  margin-top: 27px;
+  margin-left: 6px;
+  margin-right: 6px;
+}
