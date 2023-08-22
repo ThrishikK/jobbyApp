@@ -1,6 +1,9 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import {BiLinkExternal} from 'react-icons/bi'
+
 import Loader from 'react-loader-spinner'
+// import {FaLocationDot} from 'react-icons/fa'
 // import {MdLocationPin} from 'react-icons/md'
 
 import Header from '../Header'
@@ -120,6 +123,9 @@ class JobItemDetails extends Component {
             <div className="location-and-type-container-2">
               <div className="location-container">
                 {/* <MdLocationPin /> */}
+                {/* <p>
+                  <FaLocationDot />
+                </p> */}
                 <p>{selectedJob.location}</p>
               </div>
               <div className="job-type-container">
@@ -133,7 +139,10 @@ class JobItemDetails extends Component {
         <div className="container-2">
           <div className="container-2-1">
             <h1>Description</h1>
-            <p>Link</p>
+            <a className="anchor" href={selectedJob.companyWebsiteUrl}>
+              Visit
+              <BiLinkExternal />
+            </a>
           </div>
           <p>{selectedJob.jobDescription}</p>
         </div>
