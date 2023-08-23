@@ -141,6 +141,10 @@
   margin: 5px;
 }
 
+.job-description {
+  font-size: 18px;
+}
+
 .no-jobs-found-container {
   display: flex;
   flex-direction: column;

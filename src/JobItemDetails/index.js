@@ -177,6 +177,24 @@ class JobItemDetails extends Component {
     </div>
   )
 
+  retryJobClick = () => {
+    this.getJobInfo()
+  }
+
+  renderJobsRetry = () => (
+    <div>
+      <img
+        alt="failure view"
+        src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+      />
+      <h1>Oops! Something Went Wrong</h1>
+      <p>We cannot seem to find the page you are looking for</p>
+      <button onClick={this.retryJobClick} type="button">
+        Retry
+      </button>
+    </div>
+  )
+
   renderBasedOnApi = () => {
     const {apiStatus} = this.state
 
@@ -185,6 +203,8 @@ class JobItemDetails extends Component {
         return this.renderLoader()
       case apiStatusConstants.success:
         return this.renderSelectedJob()
+      case apiStatusConstants.failure:
+        return this.renderJobsRetry()
       default:
         return null
     }
@@ -198,9 +218,12 @@ class JobItemDetails extends Component {
         <Header />
         <div className="second-container">
           {this.renderBasedOnApi()}
+          <h1>Similar Jobs</h1>
           <ul className="un-ol-similar-jobs-container">
             {similarJobs.map(eachJob => (
-              <SimilarJob jobDetails={eachJob} />
+              <li key={eachJob.id}>
+                <SimilarJob jobDetails={eachJob} />
+              </li>
             ))}
           </ul>
         </div>

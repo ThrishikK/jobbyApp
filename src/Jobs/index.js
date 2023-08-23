@@ -17,6 +17,7 @@ const apiStatusConstants = {
   loading: 'LOADING',
   failure: 'FAILURE',
   noJobs: 'NOJOBS',
+  retry: 'RETRY',
 }
 
 class Jobs extends Component {
@@ -93,7 +94,7 @@ class Jobs extends Component {
     <button
       className="btn-retry-styles"
       type="button"
-      onClick={this.getProfileData()}
+      onClick={this.getProfileData}
     >
       Retry
     </button>
@@ -165,7 +166,7 @@ class Jobs extends Component {
       <h1>Salary Range</h1>
       <ul className="employment-types">
         {salaryRangesList.map(eachType => (
-          <li key={eachType.id}>
+          <li key={eachType.salaryRangeId}>
             <input
               type="radio"
               name="salary ranges"
@@ -198,28 +199,33 @@ class Jobs extends Component {
     const urlJobFilter = `${urlJobs}?search=${searchInput}&employment_type=${employmentString}&minimum_package=${minimumPackage}`
     console.log(urlJobFilter)
     const responseJobs = await fetch(urlJobFilter, options)
-    const dataJobs = await responseJobs.json()
-    // console.log(dataJobs)
-    const {jobs} = dataJobs
-    // console.log(jobs)
-    if (jobs.length === 0) {
-      this.setState({apiJobStatus: apiStatusConstants.noJobs})
+    console.log(responseJobs.ok)
+    if (responseJobs.ok === true) {
+      const dataJobs = await responseJobs.json()
+      // console.log(dataJobs)
+      const {jobs} = dataJobs
+      // console.log(jobs)
+      if (jobs.length === 0) {
+        this.setState({apiJobStatus: apiStatusConstants.noJobs})
+      } else {
+        const updatedJobs = jobs.map(eachJob => ({
+          companyLogoUrl: eachJob.company_logo_url,
+          employmentType: eachJob.employment_type,
+          id: eachJob.id,
+          jobDescription: eachJob.job_description,
+          location: eachJob.location,
+          packagePerAnnum: eachJob.package_per_annum,
+          rating: eachJob.rating,
+          title: eachJob.title,
+        }))
+        // console.log(updatedJobs)
+        this.setState({
+          jobsList: updatedJobs,
+          apiJobStatus: apiStatusConstants.success,
+        })
+      }
     } else {
-      const updatedJobs = jobs.map(eachJob => ({
-        companyLogoUrl: eachJob.company_logo_url,
-        employmentType: eachJob.employment_type,
-        id: eachJob.id,
-        jobDescription: eachJob.job_description,
-        location: eachJob.location,
-        packagePerAnnum: eachJob.package_per_annum,
-        rating: eachJob.rating,
-        title: eachJob.title,
-      }))
-      // console.log(updatedJobs)
-      this.setState({
-        jobsList: updatedJobs,
-        apiJobStatus: apiStatusConstants.success,
-      })
+      this.setState({apiJobStatus: apiStatusConstants.retry})
     }
   }
 
@@ -254,7 +260,8 @@ class Jobs extends Component {
                 <p>{eachJob.packagePerAnnum}</p>
               </div>
               <hr className="hr-rule" />
-              <p>{eachJob.jobDescription}</p>
+              <h1>Description</h1>
+              <p className="job-description">{eachJob.jobDescription}</p>
             </li>
           </Link>
         ))}
@@ -269,7 +276,25 @@ class Jobs extends Component {
         src="https://assets.ccbp.in/frontend/react-js/no-jobs-img.png"
       />
       <h1>No Jobs Found</h1>
-      <p>We could not find any jobs.Try another filters</p>
+      <p>We could not find any jobs. Try other filters</p>
+    </div>
+  )
+
+  retryJobsClick = () => {
+    this.getJobsDetails()
+  }
+
+  renderJobsRetry = () => (
+    <div>
+      <img
+        alt="failure view"
+        src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+      />
+      <h1>Oops! Something Went Wrong</h1>
+      <p>We cannot seem to find the page you are looking for</p>
+      <button onClick={this.retryJobsClick} type="button">
+        Retry
+      </button>
     </div>
   )
 
@@ -282,6 +307,8 @@ class Jobs extends Component {
         return this.renderSuccessJobs()
       case apiStatusConstants.noJobs:
         return this.renderNojobs()
+      case apiStatusConstants.retry:
+        return this.renderJobsRetry()
 
       default:
         return null

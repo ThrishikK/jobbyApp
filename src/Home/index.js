@@ -7,7 +7,7 @@ const Home = () => (
     <Header />
     <div className="subH-container">
       <h1>Find the Job that fits your life</h1>
-      <p>Millions of people searching for jobs,salary information.</p>
+      <p>Millions of people are searching for jobs</p>
       <Link to="/jobs">
         <button className="btn-home-styles" type="button">
           Find Jobs
